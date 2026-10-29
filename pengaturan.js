@@ -8,6 +8,6 @@ const CONFIG_APP = {
     namaVendor: "Tundra Photo Studio",
 
     // 2. Google Drive API Key (Penting agar galeri bisa memuat foto)
-    googleApiKey: "AIzaSyAZczbLeVTXl-QKqLDJFWQLCd-lW9jqqxo",
+    googleApiKey: "AIzaSyB3EOuZV6BZp64XAI6LpbMyXVCSNriu41M",
     whatsappAdmin: "628134073081" // <-- TAMBAHKAN BARIS INI (Ganti dengan nomor WA admin)
 };
