@@ -146,24 +146,6 @@
         </div>
 
         <div class="max-w-6xl mx-auto px-4 py-8 w-full">
-            <div id="welcomeSection" class="hidden max-w-xl mx-auto mt-6 md:mt-12 bg-white dark:bg-slate-800 rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100 dark:border-slate-700 text-center relative overflow-hidden transition-colors duration-300">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-slate-200 via-slate-800 to-slate-200 dark:from-slate-700 dark:via-blue-500 dark:to-slate-700"></div>
-                <div class="mx-auto mb-6 w-20 h-20 rounded-2xl bg-slate-900 dark:bg-slate-700 text-white flex items-center justify-center text-4xl shadow-lg">
-                    <i class="fa-solid fa-camera-retro"></i>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-bold mb-3 text-slate-800 dark:text-white" data-i18n="welcomePageTitle">Selamat Datang 👋</h2>
-                <p class="text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed mb-6" data-i18n="welcomePageDesc">Ini adalah portal seleksi foto dari <span class='font-bold'>{vendor}</span>.</p>
-                <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-left flex gap-4 items-start">
-                    <div class="w-10 h-10 shrink-0 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                        <i class="fa-solid fa-link"></i>
-                    </div>
-                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="welcomePageHint">Galeri hanya bisa dibuka melalui link khusus yang dikirim oleh fotografer. Silakan buka kembali link tersebut untuk mulai memilih foto.</p>
-                </div>
-                <a id="welcomeWaBtn" href="#" target="_blank" rel="noopener" class="hidden mt-6 inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-xl transition shadow-lg">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> <span data-i18n="welcomePageWa">Minta Link ke Fotografer</span>
-                </a>
-            </div>
-
             <div id="inputSection" class="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm border border-slate-100 dark:border-slate-700 mb-8 max-w-2xl mx-auto text-center relative overflow-hidden hidden transition-colors duration-300">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-slate-200 via-slate-800 to-slate-200 dark:from-slate-700 dark:via-blue-500 dark:to-slate-700"></div>
                 <h2 class="text-xl font-bold mb-2 text-slate-800 dark:text-white" data-i18n="manualTitle">Akses Manual Galeri</h2>
@@ -446,10 +428,6 @@
                 manualTitle: "Akses Manual Galeri",
                 manualDesc: "Silakan tempel (paste) link folder Google Drive Anda di bawah ini.",
                 btnOpen: "Buka Galeri",
-                welcomePageTitle: "Selamat Datang 👋",
-                welcomePageDesc: "Ini adalah portal seleksi foto dari <span class='font-bold'>{vendor}</span>.",
-                welcomePageHint: "Galeri hanya bisa dibuka melalui link khusus yang dikirim oleh fotografer. Silakan buka kembali link tersebut untuk mulai memilih foto.",
-                welcomePageWa: "Minta Link ke Fotografer",
                 loading: "Menarik data dari Google Drive...",
                 folderTitle: "Sub-Folder Tersedia",
                 btnBackFolder: "Kembali",
@@ -493,10 +471,6 @@
                 manualTitle: "Manual Gallery Access",
                 manualDesc: "Please paste your Google Drive folder link below.",
                 btnOpen: "Open Gallery",
-                welcomePageTitle: "Welcome 👋",
-                welcomePageDesc: "This is the photo selection portal from <span class='font-bold'>{vendor}</span>.",
-                welcomePageHint: "The gallery can only be opened through a special link sent by your photographer. Please open that link again to start selecting photos.",
-                welcomePageWa: "Request Link from Photographer",
                 loading: "Fetching data from Google Drive...",
                 folderTitle: "Available Sub-Folders",
                 btnBackFolder: "Go Back",
@@ -633,15 +607,7 @@
                 document.getElementById('inputSection').classList.add('hidden');
                 setTimeout(() => { loadFromDrive(); }, 500);
             } else {
-                // Tanpa link hasil generate: tampilkan halaman welcome, akses manual dinonaktifkan
-                document.getElementById('greetingSection').classList.add('hidden');
-                document.getElementById('welcomeSection').classList.remove('hidden');
-                const waNum = (typeof CONFIG_APP !== 'undefined' && CONFIG_APP.whatsappAdmin) ? CONFIG_APP.whatsappAdmin : '';
-                if (waNum) {
-                    const waBtn = document.getElementById('welcomeWaBtn');
-                    waBtn.href = `https://wa.me/${waNum}`;
-                    waBtn.classList.remove('hidden');
-                }
+                document.getElementById('inputSection').classList.remove('hidden');
             }
 
             const lightboxEl = document.getElementById('lightbox');
@@ -1171,7 +1137,7 @@
             
             selectedPhotos.forEach((p, index) => {
                 const note = appState.notes[p.id];
-                textContent += `${index + 1}. ${p.name}\n`;
+                textContent += `${index + 1}. ${p.name} (Folder: ${p.folderName || 'Utama'})\n`;
                 if (note) textContent += `   Catatan: ${note}\n`;
             });
             
@@ -1194,7 +1160,7 @@
             let textToCopy = `*List Foto Pilihan Client*\nLayanan: ${vendor}\nKlien: *${appState.clientName}*\nTotal: ${selectedPhotos.length} Foto\n\n`;
             selectedPhotos.forEach((p, index) => {
                 const note = appState.notes[p.id];
-                textToCopy += `${index + 1}. ${p.name}\n`;
+                textToCopy += `${index + 1}. ${p.name} [Folder: ${p.folderName || 'Utama'}]\n`;
                 if (note) textToCopy += `   Catatan: ${note}\n`;
             });
             textToCopy += `\nDikirim dari ${vendor} Portal`;
